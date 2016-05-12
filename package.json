@@ -9,6 +9,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "sloc": "^0.1.10"
+    "joi": "^8.1.0",
+    "sloc": "^0.1.10",
+    "spdx-license-ids": "^1.2.1"
+  },
+  "devDependencies": {
+    "standard": "^7.0.1"
   }
 }
