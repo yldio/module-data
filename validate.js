@@ -1,6 +1,7 @@
 var schemas = require('./schemas')
 var Joi = require('joi')
 var async = require('async')
+var toString = Object.prototype.toString
 
 module.exports = validate
 
@@ -10,22 +11,40 @@ var validators = {
   local: validateTree
 }
 
-function validate (type, obj, done) {
+function validate (type, data, done) {
   if (!validators[type]) {
     return done(new Error('Unknown type.'))
   }
 
-  return validators[type](obj, schemas[type], done)
+  if (toString.call(data) === '[object Object]') {
+    data = [data]
+  }
+
+  if (toString.call(data) !== '[object Array]') {
+    return done(new Error('Incorrect data.'))
+  }
+
+  return validators[type](data, schemas[type], done)
 }
 
-function validateFlat (obj, schema, done) {
-  return Joi.validate(obj, schema, done)
+function validateFlat (arr, schema, done) {
+  var tasks = []
+
+  arr.forEach(function (obj) {
+    tasks.push(function (next) {
+      return Joi.validate(obj, schema, next)
+    })
+  })
+
+  return async.series(tasks, done)
 }
 
-function validateTree (obj, schema, done) {
+function validateTree (arr, schema, done) {
   var queue = []
 
-  recursive(obj, schema, queue)
+  arr.forEach(function (obj) {
+    recursive(obj, schema, queue)
+  })
 
   return async.series(queue, done)
 }
