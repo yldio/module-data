@@ -16,37 +16,53 @@ function validate (type, data, done) {
     return done(new Error('Unknown type.'))
   }
 
-  if (toString.call(data) === '[object Object]') {
-    data = [data]
-  }
-
-  if (toString.call(data) !== '[object Array]') {
+  if (toString.call(data) !== '[object Object]') {
     return done(new Error('Incorrect data.'))
   }
 
   return validators[type](data, schemas[type], done)
 }
 
-function validateFlat (arr, schema, done) {
-  var tasks = []
+function validateFlat (data, schema, done) {
+  // Check if it is single remote module's data
+  if (~Object.keys(data).indexOf('__moduleData')) {
+    return Joi.validate(data, schema, done)
+  } else {
+    var queue = []
 
-  arr.forEach(function (obj) {
-    tasks.push(function (next) {
-      return Joi.validate(obj, schema, next)
+    // Multiple remote module's data
+    Object.keys(data).forEach(function (dep) {
+      queue.push(validateDepsName(dep, data[dep]))
+      queue.push(function (next) {
+        return Joi.validate(data[dep], schema, next)
+      })
     })
-  })
 
-  return async.series(tasks, done)
+    return async.series(queue, done)
+  }
 }
 
-function validateTree (arr, schema, done) {
+function validateTree (data, schema, done) {
   var queue = []
 
-  arr.forEach(function (obj) {
-    recursive(obj, schema, queue)
+  Object.keys(data).forEach(function (rootDep) {
+    queue.push(validateDepsNameAndVersion(rootDep, data[rootDep]))
+    recursive(data[rootDep], schema, queue)
   })
 
   return async.series(queue, done)
+}
+
+function validateDepsName (mdlName, obj) {
+  return function (done) {
+    var err
+
+    if (mdlName !== obj.name) {
+      err = new Error('Dependency name unexpected.')
+    }
+
+    return done(err)
+  }
 }
 
 function validateDepsNameAndVersion (mdlName, obj) {
