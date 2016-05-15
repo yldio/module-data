@@ -1,7 +1,3 @@
 module.exports = {}
-module.exports.remote = remote
-module.exports.local = local
-
-function remote () {}
-
-function local () {}
+module.exports.remote = require('./lib/streamline/local')
+module.exports.local = require('./lib/streamline/remote')
