@@ -46,7 +46,7 @@ function validateTree (data, schema, done) {
   var queue = []
 
   Object.keys(data).forEach(function (rootDep) {
-    queue.push(validateDepsNameAndVersion(rootDep, data[rootDep]))
+    queue.push(validateDepsName(rootDep, data[rootDep]))
     recursive(data[rootDep], schema, queue)
   })
 
@@ -65,22 +65,6 @@ function validateDepsName (mdlName, obj) {
   }
 }
 
-function validateDepsNameAndVersion (mdlName, obj) {
-  return function (done) {
-    var err, version
-
-    mdlName = mdlName.split('@')
-    version = mdlName[1]
-    mdlName = mdlName[0]
-
-    if (mdlName !== obj.name || version !== obj.version) {
-      err = new Error('Dependency name and/or version unexpected.')
-    }
-
-    return done(err)
-  }
-}
-
 function recursive (obj, schema, queue) {
   queue.push(function (done) {
     Joi.validate(obj, schema, done)
@@ -88,7 +72,7 @@ function recursive (obj, schema, queue) {
 
   if (obj.dependencies && ~Object.keys(obj.dependencies).length) {
     for (var dep in obj.dependencies) {
-      queue.push(validateDepsNameAndVersion(dep, obj.dependencies[dep]))
+      queue.push(validateDepsName(dep, obj.dependencies[dep]))
       recursive(obj.dependencies[dep], schema, queue)
     }
   }
