@@ -13,14 +13,6 @@ var vulnerabilitiesObj = Joi.object().keys({
 
 var remoteDataSchema = Joi.object().keys({
   name: Joi.string().required(),
-  publicCoverage: Joi.number().required(),
-  github: Joi.object().keys({
-    openIssues: Joi.number().integer().required(),
-    openPullRequests: Joi.number().integer().required(),
-    numOfContributors: Joi.number().integer().required(),
-    stars: Joi.number().integer().required()
-  }).required(),
-  npmInstallsMonth: Joi.number().integer().required(),
   versions: Joi.object().pattern(
     versionRegex,
     Joi.object().keys({
@@ -67,16 +59,6 @@ var standardDataSchema = Joi.object().keys({
   license: Joi.string().valid(spdxLicenseIds).required(),
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
-  moduleStats: Joi.object().keys({
-    publicCoverage: Joi.number().required(),
-    github: Joi.object().keys({
-      openIssues: Joi.number().integer().required(),
-      openPullRequests: Joi.number().integer().required(),
-      numOfContributors: Joi.number().integer().required(),
-      stars: Joi.number().integer().required()
-    }).required(),
-    npmInstallsMonth: Joi.number().integer().required()
-  }),
   isOutdated: Joi.boolean().required(),
   isDeprecated: Joi.boolean().required(),
   vulnerabilities: Joi.array().required()
