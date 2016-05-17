@@ -1,23 +1,27 @@
 var toString = Object.prototype.toString
 
-module.exports = depsSet
+module.exports = depsMap
 
-function depsSet (data) {
-  var depsSet = new Set()
+function depsMap (data) {
+  var deps = {}
 
   if (toString.call(data) === '[object Object]') {
     data = [data]
   }
 
   data.forEach(function (rootDep) {
-    recursive(depsSet, rootDep)
+    recursive(deps, rootDep)
   })
 
-  return depsSet
+  return deps
 }
 
-function recursive (set, obj) {
-  set.add(obj.name)
+function recursive (deps, obj) {
+  if (!deps[obj.name]) {
+    deps[obj.name] = [obj.version]
+  } else {
+    deps[obj.name].push(obj.version)
+  }
 
   if (obj.dependencies && ~Object.keys(obj.dependencies).length) {
     for (var dep in obj.dependencies) {
