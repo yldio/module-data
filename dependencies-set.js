@@ -5,12 +5,12 @@ module.exports = depsSet
 function depsSet (data) {
   var depsSet = new Set()
 
-  if (toString.call(data) === '[object Object]') {
-    data = [data]
+  if (toString.call(data) !== '[object Object]') {
+    throw new Error('Data should be an object.')
   }
 
-  data.forEach(function (rootDep) {
-    recursive(depsSet, rootDep)
+  Object.keys(data).forEach(function (rootDep) {
+    recursive(depsSet, data[rootDep])
   })
 
   return depsSet
@@ -21,7 +21,7 @@ function recursive (set, obj) {
 
   if (obj.dependencies && ~Object.keys(obj.dependencies).length) {
     for (var dep in obj.dependencies) {
-      recursive(obj.dependencies[dep])
+      recursive(set, obj.dependencies[dep])
     }
   }
 }
