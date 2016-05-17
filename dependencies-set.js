@@ -3,7 +3,7 @@ var toString = Object.prototype.toString
 module.exports = depsSet
 
 function depsSet (data) {
-  var depsSet = new Set()
+  var depsSet = {}
 
   if (toString.call(data) !== '[object Object]') {
     throw new Error('Data should be an object.')
@@ -13,11 +13,18 @@ function depsSet (data) {
     recursive(depsSet, data[rootDep])
   })
 
+  for (var dep in depsSet) {
+    depsSet[dep] = Array.from(depsSet[dep])
+  }
+
   return depsSet
 }
 
 function recursive (set, obj) {
-  set.add(obj.name)
+  if (!set[obj.name]) {
+    set[obj.name] = new Set()
+  }
+  set[obj.name].add(obj.version)
 
   if (obj.dependencies && ~Object.keys(obj.dependencies).length) {
     for (var dep in obj.dependencies) {
