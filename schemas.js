@@ -1,5 +1,5 @@
 var Joi = require('joi')
-var spdxLicenseIds = require('spdx-license-ids')
+var licenseList = require('./lib/license-list')
 
 var versionRegex = /([0-9]+)\.([0-9]+)\.([0-9]+)(?:(\-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-\-\.]+)?/g
 var anything = /\w|\d/g
@@ -32,13 +32,16 @@ var remoteDataSchema = Joi.object().keys({
 var localDataSchema = Joi.object().keys({
   name: Joi.string().required(),
   version: Joi.string().regex(versionRegex).required(),
-  sloc: Joi.number().integer().required(),
+  sloc: Joi.object().keys({
+    real: Joi.number().integer().required(),
+    pkg: Joi.number().integer().required()
+  }),
   tests: Joi.object().keys({
     exists: Joi.boolean().required(),
     framework: Joi.boolean().required(),
     npmScript: Joi.boolean().required()
   }),
-  license: Joi.string().valid(spdxLicenseIds).required(),
+  license: Joi.string().valid(licenseList).required(),
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
   __moduleData: Joi.object().keys({
@@ -50,13 +53,16 @@ var localDataSchema = Joi.object().keys({
 var standardDataSchema = Joi.object().keys({
   name: Joi.string().required(),
   version: Joi.string().regex(versionRegex).required(),
-  sloc: Joi.number().integer().required(),
+  sloc: Joi.object().keys({
+    real: Joi.number().integer().required(),
+    pkg: Joi.number().integer().required()
+  }),
   tests: Joi.object().keys({
     exists: Joi.boolean().required(),
     framework: Joi.boolean().required(),
     npmScript: Joi.boolean().required()
   }),
-  license: Joi.string().valid(spdxLicenseIds).required(),
+  license: Joi.string().valid(licenseList).required(),
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
   isOutdated: Joi.boolean().required(),
