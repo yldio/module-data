@@ -26,7 +26,7 @@ var remoteDataSchema = Joi.object().keys({
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('remote').required()
-  })
+  }).required()
 })
 
 var localDataSchema = Joi.object().keys({
@@ -47,7 +47,7 @@ var localDataSchema = Joi.object().keys({
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('local').required()
-  })
+  }).required()
 })
 
 var standardDataSchema = Joi.object().keys({
@@ -72,7 +72,7 @@ var standardDataSchema = Joi.object().keys({
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('standard').required()
-  })
+  }).required()
 })
 
 module.exports = {
