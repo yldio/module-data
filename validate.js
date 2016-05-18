@@ -50,7 +50,13 @@ function validateTree (data, schema, done) {
     recursive(data[rootDep], schema, queue)
   })
 
-  return async.series(queue, done)
+  return async.series(queue, function (err) {
+    if (err) {
+      return done(err)
+    }
+
+    return done(null, data)
+  })
 }
 
 function validateDepsName (mdlName, obj) {
