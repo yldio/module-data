@@ -44,6 +44,7 @@ var localDataSchema = Joi.object().keys({
   license: Joi.string().valid(licenseList).required(),
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
+  dependenciesCount: Joi.number().integer().required(),
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('local').required()
@@ -65,6 +66,7 @@ var standardDataSchema = Joi.object().keys({
   license: Joi.string().valid(licenseList).required(),
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
+  dependenciesCount: Joi.number().integer().required(),
   isOutdated: Joi.boolean().required(),
   isDeprecated: Joi.boolean().required(),
   vulnerabilities: Joi.array().required()
