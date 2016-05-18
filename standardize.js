@@ -2,7 +2,7 @@ var async = require('async')
 var toString = Object.prototype.toString
 var getDepsSet = require('./dependencies-set')
 var validate = require('./validate')
-var initRemoteData = require('./lib/data-handler').initRemoteData
+var initStandardData = require('./lib/data-handler').initStandardData
 
 module.exports = standardize
 
@@ -63,7 +63,7 @@ function validateData (data, done) {
 }
 
 function recursive (obj, remotePkgs) {
-  var standardData = initRemoteData(obj, remotePkgs)
+  var standardData = initStandardData(obj, remotePkgs)
 
   if (obj.dependencies && ~Object.keys(obj.dependencies).length) {
     for (var dep in obj.dependencies) {
