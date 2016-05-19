@@ -23,6 +23,7 @@ var remoteDataSchema = Joi.object().keys({
         .items(vulnerabilitiesObj)
     })
   ),
+  private: Joi.boolean().required(),
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('remote').required()
@@ -48,7 +49,8 @@ var localDataSchema = Joi.object().keys({
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('local').required()
-  }).required()
+  }).required(),
+  private: Joi.boolean().required()
 })
 
 var standardDataSchema = Joi.object().keys({
