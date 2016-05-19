@@ -69,14 +69,14 @@ var standardDataSchema = Joi.object().keys({
   dependencies: Joi.object().required()
     .pattern(anything, Joi.object()),
   dependenciesCount: Joi.number().integer().required(),
-  isOutdated: Joi.boolean().required(),
-  isDeprecated: Joi.boolean().required(),
-  vulnerabilities: Joi.array().required()
-    .items(vulnerabilitiesObj),
+  isOutdated: Joi.boolean(),
+  isDeprecated: Joi.boolean(),
+  vulnerabilities: Joi.array().items(vulnerabilitiesObj),
   __moduleData: Joi.object().keys({
     version: Joi.string().regex(versionRegex).required(),
     type: Joi.string().valid('standard').required()
-  }).required()
+  }).required(),
+  private: Joi.boolean().required()
 })
 
 module.exports = {

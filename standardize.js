@@ -49,6 +49,15 @@ function validateData (data, done) {
       var err
 
       var test = Object.keys(depsSet).every(function (dep) {
+        if (!data.remote[dep]) {
+          return false
+        }
+
+        // NOTE: no need to validate anything more
+        if (data.remote[dep].private) {
+          return true
+        }
+
         var v = depsSet[dep][0]
         return (data.remote[dep] && data.remote[dep].versions[v])
       })
