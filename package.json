@@ -1,12 +1,21 @@
 {
   "name": "module-data",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Traverse local module data and query remote module data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
-  "author": "",
+  "author": [
+    {
+      "name": "Ricardo Barros",
+      "email": "ricardo.barros@yld.io"
+    },
+    {
+      "name": "Igor Soarez",
+      "email": "igor@yld.io"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "async": "^1.5.2",
