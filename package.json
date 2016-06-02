@@ -1,6 +1,6 @@
 {
   "name": "module-data",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Traverse local module data and query remote module data",
   "main": "index.js",
   "scripts": {
